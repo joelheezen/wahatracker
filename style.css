@@ -1,0 +1,67 @@
+@layer base {
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number'] {
+      -webkit-appearance: none;
+      margin: 0;
+      -moz-appearance: textfield !important;
+    }
+ }
+
+body{
+    font-family: 'Chakra Petch', sans-serif;
+}
+
+#trackerContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 10vh;
+}
+
+site{
+    display: flex;
+    flex-direction: column;
+}
+
+#playerContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.scoreContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+#playerContainerLeft, #playerContainerRight{
+    display: flex;
+    flex-direction: column;
+}
+
+#primary1Containerleft, #primary2Containerleft, #secondary1Containerleft, #secondary2Containerleft, #secondary3Containerleft{
+    display:flex;
+    flex-direction: row;
+}
+
+#primary1Containerright, #primary2Containerright, #secondary1Containerright, #secondary2Containerright, #secondary3Containerright{
+    display:flex;
+    flex-direction: row;
+}
+
+.leftnumber, .rightnumber{
+    max-width: 1vw;
+    appearance: textfield;
+}
+
+.roundTrackBtn{
+    flex-grow: 1;
+    margin-left:1vh;
+    margin-right: 1vh;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 9vh;
+    border:0.5vh solid black;
+    transition: border 5000ms ease-in-out,
+}

@@ -10,7 +10,6 @@ async function getData(){
 
 async function SecondarySelectBaseLayout(){
     const data = await getData();
-    console.log(data)
 
     let site = document.getElementsByTagName("site")[0]
     site.innerHTML = ""
@@ -51,7 +50,9 @@ async function SecondarySelectBaseLayout(){
 
     let rdyBtn = document.createElement("button")
     site.appendChild(rdyBtn)
+    rdyBtn.innerHTML = "ready?"
     rdyBtn.addEventListener("click", () => saveSelections())
+    
 }
 
 function addPlayerArea(playerSide){
@@ -122,7 +123,7 @@ async function createSecondaryList(playerSide){
             optgroups.push(e.category)
         }
     })
-    console.log(optgroups)
+    
     //initializes all secondary selectors and clears them before adding options
     let sec1 = document.getElementById(playerSide + "Sec1")
     let sec2 = document.getElementById(playerSide + "Sec2")
@@ -171,6 +172,9 @@ async function createSecondaryList(playerSide){
 
 async function saveSelections(){
     const data = await getData();
+
+    let leftName = document.getElementById("leftName").value
+    let rightName = document.getElementById("rightName").value
     let missionSelect = document.getElementById("missionSelect").value
     let leftSec1 = document.getElementById("leftSec1").value
     let leftSec2 = document.getElementById("leftSec2").value
@@ -201,17 +205,19 @@ async function saveSelections(){
     })
     let leftSecs = [leftSec1, leftSec2, leftSec3]
     let rightSecs = [rightSec1, rightSec2, rightSec3]
-    createScoreLayout(leftSecs, rightSecs)
+    createScoreLayout(leftSecs, rightSecs, leftName, rightName)
 }
 
-function createScoreLayout(L, R){
+function createScoreLayout(L, R, ln, rn){
     let site = document.getElementsByTagName("site")[0]
     site.innerHTML=""
-    console.log(L,R)
 
     createRoundTracker()
-    createPlayerTracker(L, "left")
-    createPlayerTracker(R, "right")
+    let playerContainers = document.createElement("div")
+    playerContainers.id= "playerContainer"
+    site.appendChild(playerContainers)
+    createPlayerTracker(L, "left", ln)
+    createPlayerTracker(R, "right", rn)
 
 }
 
@@ -224,6 +230,7 @@ function createRoundTracker(){
 
     for(let i = 1; i < 6; i++){
         let rndbox = document.createElement("div")
+        rndbox.classList.add("roundTrackBtn")
         rndbox.style.background= "grey"
         trackerContainer.appendChild(rndbox)
         rndbox.innerHTML = "round " + i
@@ -231,13 +238,13 @@ function createRoundTracker(){
     }
 }
 
-function createPlayerTracker(arr, side){
-    let site = document.getElementsByTagName("site")[0]
+function createPlayerTracker(arr, side, name){
+    let PC = document.getElementById("playerContainer")
 
     let playerContainer = document.createElement("div")
     playerContainer.id = "playerContainer" + side
 
-    site.appendChild(playerContainer)
+    PC.appendChild(playerContainer)
 
     let primaryContainer = document.createElement("div")
     primaryContainer.id= "primaryContainer" + side
@@ -299,30 +306,116 @@ function createPlayerTracker(arr, side){
     let sec3Sub = document.createElement("p")
     sec3Sub.innerHTML = arr[2].description
 
-    sec1Container.appendChild(sec1Header)
-    sec1Container.appendChild(sec1Sub)
-    sec2Container.appendChild(sec2Header)
-    sec2Container.appendChild(sec2Sub)
-    sec3Container.appendChild(sec3Header)
-    sec3Container.appendChild(sec3Sub)
+    let sec1 = document.createElement("div")
+    let sec2 = document.createElement("div")
+    let sec3 = document.createElement("div")
 
-    addScoreFields(prim1Container, side)
-    addScoreFields(prim2Container, side)
+    sec1Container.appendChild(sec1)
+    sec2Container.appendChild(sec2)
+    sec3Container.appendChild(sec3)
 
-    addScoreFields(sec1Container, side)
-    addScoreFields(sec2Container, side)
-    addScoreFields(sec3Container, side)
+    sec1.appendChild(sec1Header)
+    sec1.appendChild(sec1Sub)
+    sec2.appendChild(sec2Header)
+    sec2.appendChild(sec2Sub)
+    sec3.appendChild(sec3Header)
+    sec3.appendChild(sec3Sub)
+    
+    let prim1ScoreContainer = document.createElement("div")
+    prim1ScoreContainer.classList.add("scoreContainer")
+    let prim2ScoreContainer = document.createElement("div")
+    prim2ScoreContainer.classList.add("scoreContainer")
+
+    let sec1ScoreContainer = document.createElement("div")
+    sec1ScoreContainer.classList.add("scoreContainer")
+    let sec2ScoreContainer = document.createElement("div")
+    sec2ScoreContainer.classList.add("scoreContainer")
+    let sec3ScoreContainer = document.createElement("div")
+    sec3ScoreContainer.classList.add("scoreContainer")
+
+    prim1Container.appendChild(prim1ScoreContainer)
+    prim2Container.appendChild(prim2ScoreContainer)
+
+    sec1Container.appendChild(sec1ScoreContainer)
+    sec2Container.appendChild(sec2ScoreContainer)
+    sec3Container.appendChild(sec3ScoreContainer)
+
+    addScoreFields(prim1ScoreContainer, side)
+    addScoreFields(prim2ScoreContainer, side)
+
+    addScoreFields(sec1ScoreContainer, side)
+    addScoreFields(sec2ScoreContainer, side)
+    addScoreFields(sec3ScoreContainer, side)
+
+    let scoreContainer = document.createElement("div")
+    let Pname = document.createElement("h3")
+    Pname.innerHTML = name
+
+    playerContainer.appendChild(scoreContainer)
+    scoreContainer.appendChild(Pname)
+    let totalScore = document.createElement("h3")
+    totalScore.id = "totalscore" + side
+    scoreContainer.appendChild(totalScore)
 }
 
 function addScoreFields(e, side){
     for(let i = 1; i < 6; i++){
-        console.log("test")
         let rnd = document.createElement("div")
         e.appendChild(rnd)
         let input = document.createElement("input")
         input.classList.add(side + "number")
         rnd.appendChild(input)
+        input.setAttribute("type", "number")
+        input.value = 0
+        input.addEventListener("input", () => max2(input))
+        input.addEventListener("input", () => calculateScore())
+        input.addEventListener("focus", () => removeNumber(input))
+        input.addEventListener("focusout", () => removeEmpty(input))
     }
+}
+
+function max2(e){
+    if(e.value.length >2){
+        e.value = e.value.slice(0, 2)
+    }
+}
+
+function removeNumber(e){
+    if (e.value == 0){
+        e.value = ""
+    }
+    else{
+        e.select()
+    }
+}
+
+function removeEmpty(e){
+    if (e.value == "") {
+        e.value = 0
+    }
+    calculateScore()
+}
+
+function calculateScore(){
+    let scoreArrayLeft = document.getElementsByClassName("leftnumber")
+    let scoreArrayRight = document.getElementsByClassName("rightnumber")
+
+    let scoreTotalLeft = document.getElementById("totalscoreleft")
+    let scoreTotalRight = document.getElementById("totalscoreright")
+
+    let scoreTotalLeftNum = 0
+    let scoreTotalRightNum = 0
+
+    for(i = 0; i < scoreArrayLeft.length; i++){
+        scoreTotalLeftNum += parseInt(scoreArrayLeft[i].value)
+    }
+    for(i = 0; i < scoreArrayRight.length; i++){
+        scoreTotalRightNum += parseInt(scoreArrayRight[i].value)
+    }
+
+    scoreTotalLeft.innerHTML = scoreTotalLeftNum
+    scoreTotalRight.innerHTML = scoreTotalRightNum
+
 }
 
 function colourChange(e){
