@@ -60,8 +60,9 @@ function addPlayerArea(playerSide){
     let sideDiv = document.createElement("div")
     sideDiv.id = playerSide + "Side"
     site.appendChild(sideDiv)
-
+    
     let playerNameInput = document.createElement("input")
+    playerNameInput.addEventListener("input", () => max15(playerNameInput))
     playerNameInput.id = playerSide +"Name"
     let playerNameLabel = document.createElement("label")
     playerNameLabel.setAttribute("for", playerSide +"Name")
@@ -258,6 +259,8 @@ function createPlayerTracker(arr, side, name){
 
     let prim1 = document.createElement("div")
     let prim2 = document.createElement("div")
+    prim1.classList.add("subPrim")
+    prim2.classList.add("subPrim")
     prim1Container.appendChild(prim1)
     prim1Container.id= "primary1Container" + side
     prim2Container.appendChild(prim2)
@@ -265,6 +268,8 @@ function createPlayerTracker(arr, side, name){
 
     let prim1Header = document.createElement("h3")
     let prim2Header = document.createElement("h3")
+    prim1Header.classList.add("primHeader")
+    prim2Header.classList.add("primHeader")
     prim1Header.innerHTML = "Primary 1 objective"
     prim2Header.innerHTML = "Primary 2 objective"
     let prim1Sub = document.createElement("p")
@@ -299,6 +304,10 @@ function createPlayerTracker(arr, side, name){
     let sec3Header = document.createElement("h3")
     sec3Header.innerHTML = arr[2].name
 
+    sec1Header.classList.add("secHeader")
+    sec2Header.classList.add("secHeader")
+    sec3Header.classList.add("secHeader")
+
     let sec1Sub = document.createElement("p")
     sec1Sub.innerHTML = arr[0].description
     let sec2Sub = document.createElement("p")
@@ -309,6 +318,10 @@ function createPlayerTracker(arr, side, name){
     let sec1 = document.createElement("div")
     let sec2 = document.createElement("div")
     let sec3 = document.createElement("div")
+
+    sec1.classList.add("subSec")
+    sec2.classList.add("subSec")
+    sec3.classList.add("subSec")
 
     sec1Container.appendChild(sec1)
     sec2Container.appendChild(sec2)
@@ -348,19 +361,23 @@ function createPlayerTracker(arr, side, name){
     addScoreFields(sec3ScoreContainer, side)
 
     let scoreContainer = document.createElement("div")
+    scoreContainer.classList.add("scoreBox")
     let Pname = document.createElement("h3")
     Pname.innerHTML = name
+    Pname.classList.add("subScore")
 
     playerContainer.appendChild(scoreContainer)
     scoreContainer.appendChild(Pname)
     let totalScore = document.createElement("h3")
     totalScore.id = "totalscore" + side
+    totalScore.classList.add("subScore")
     scoreContainer.appendChild(totalScore)
 }
 
 function addScoreFields(e, side){
     for(let i = 1; i < 6; i++){
         let rnd = document.createElement("div")
+        rnd.classList.add("scoreDiv")
         e.appendChild(rnd)
         let input = document.createElement("input")
         input.classList.add(side + "number")
@@ -377,6 +394,12 @@ function addScoreFields(e, side){
 function max2(e){
     if(e.value.length >2){
         e.value = e.value.slice(0, 2)
+    }
+}
+
+function max15(e){
+    if(e.value.length >15){
+        e.value = e.value.slice(0, 15)
     }
 }
 

@@ -50,8 +50,11 @@ site{
 }
 
 .leftnumber, .rightnumber{
-    max-width: 1vw;
+    max-width: 2vw;
+    height: 3vh;
     appearance: textfield;
+    font-size: 1.5vh;
+    margin-right:0.5vw;
 }
 
 .roundTrackBtn{
@@ -64,4 +67,46 @@ site{
     line-height: 9vh;
     border:0.5vh solid black;
     transition: border 5000ms ease-in-out,
+}
+
+.scoreDiv{
+    margin: auto;
+}
+
+#primary1Containerright, #primary2Containerright{
+    max-height: 15vh;
+}
+
+#primary1Containerleft, #primary2Containerleft{
+    max-height: 15vh;
+}
+
+#secondary1Containerright, #secondary2Containerright, #secondary3Containerright{
+    max-height: 18vh;
+}
+
+#secondary1Containerleft, #secondary2Containerleft, #secondary3Containerleft{
+    max-height: 18vh;
+}
+
+.subSec{
+    overflow: scroll;
+    border: solid 1px;
+    margin-bottom: 0.5vh;
+}
+
+.subPrim{
+    margin-bottom: 0.5vh;
+}
+
+.primHeader, .secHeader{
+    margin-top:0
+}
+
+.scoreBox{
+    display: flex;
+}
+
+.subScore{
+    flex:auto
 }
